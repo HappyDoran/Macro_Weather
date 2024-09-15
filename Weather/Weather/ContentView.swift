@@ -8,14 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject private var currentWeather: CurrentWeather
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text(currentWeather.weather.name)
         }
-        .padding()
+        .task {
+            await populateProducts()
+        }
+    }
+    
+    private func populateProducts() async {
+        do {
+            try await currentWeather.getWeather()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }
 

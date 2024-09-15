@@ -52,6 +52,8 @@
 		4F1FEE192C96DC1000E82B88 /* FiveDaysWeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveDaysWeatherModel.swift; sourceTree = "<group>"; };
 		4F1FEE1B2C96DD6A00E82B88 /* CommonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonModel.swift; sourceTree = "<group>"; };
 		4F1FEE1D2C96DDF600E82B88 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		4F1FEE1F2C96FCE600E82B88 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		4F1FEE202C96FD7C00E82B88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 		4F1FEDD82C96B21000E82B88 = {
 			isa = PBXGroup;
 			children = (
+				4F1FEE1F2C96FCE600E82B88 /* Secrets.xcconfig */,
 				4F1FEDE32C96B21000E82B88 /* Weather */,
 				4F1FEDF42C96B21100E82B88 /* WeatherTests */,
 				4F1FEDFE2C96B21100E82B88 /* WeatherUITests */,
@@ -102,6 +105,7 @@
 		4F1FEDE32C96B21000E82B88 /* Weather */ = {
 			isa = PBXGroup;
 			children = (
+				4F1FEE202C96FD7C00E82B88 /* Info.plist */,
 				4F1FEE182C96BA4B00E82B88 /* Model */,
 				4F1FEDE42C96B21000E82B88 /* WeatherApp.swift */,
 				4F1FEDE62C96B21000E82B88 /* ContentView.swift */,
@@ -440,6 +444,7 @@
 		};
 		4F1FEE062C96B21100E82B88 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F1FEE1F2C96FCE600E82B88 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -449,6 +454,7 @@
 				DEVELOPMENT_TEAM = U6CCD5BT22;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Weather/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -478,6 +484,7 @@
 				DEVELOPMENT_TEAM = U6CCD5BT22;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Weather/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -498,6 +505,7 @@
 		};
 		4F1FEE092C96B21100E82B88 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F1FEE1F2C96FCE600E82B88 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";

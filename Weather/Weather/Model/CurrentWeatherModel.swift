@@ -15,7 +15,7 @@ struct CurrentWeatherModel: Codable {
     let main: CurrentMain
     let visibility: Int
     let wind: Wind
-    let rain: CurrentRain
+    let rain: CurrentRain?
     let clouds: Clouds
     let dt: Int
     let sys: CurrentSys
@@ -39,7 +39,7 @@ struct CurrentWeatherModel: Codable {
         sys: CurrentSys(type: 1, id: 8074, country: "JP", sunrise: 1618297922, sunset: 1618340280),
         timezone: 32400,
         id: 1850147,
-        name: "Tokyo",
+        name: "hello",
         cod: 200
     )
 }
