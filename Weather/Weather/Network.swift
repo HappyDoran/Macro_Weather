@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+class Network: ObservableObject {
+    @Published var weather: CurrentWeatherModel = CurrentWeatherModel.dummyCurrentData
+}
