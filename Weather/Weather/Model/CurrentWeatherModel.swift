@@ -24,7 +24,7 @@ struct CurrentWeatherModel: Codable {
     let cod: Int
     
     //더미 데이터 생성 - GPT에게 생성 부탁했습니다.
-    static let dummyData = CurrentWeatherModel(
+    static let dummyCurrentData = CurrentWeatherModel(
         coord: Coord(lon: 139.6917, lat: 35.6895),
         weather: [
             Weather(id: 801, main: "Clouds", description: "few clouds", icon: "02d")

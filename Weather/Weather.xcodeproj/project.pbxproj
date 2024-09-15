@@ -17,6 +17,7 @@
 		4F1FEE172C96BA4600E82B88 /* CurrentWeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FEE162C96BA4600E82B88 /* CurrentWeatherModel.swift */; };
 		4F1FEE1A2C96DC1000E82B88 /* FiveDaysWeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FEE192C96DC1000E82B88 /* FiveDaysWeatherModel.swift */; };
 		4F1FEE1C2C96DD6A00E82B88 /* CommonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FEE1B2C96DD6A00E82B88 /* CommonModel.swift */; };
+		4F1FEE1E2C96DDF600E82B88 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FEE1D2C96DDF600E82B88 /* Network.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		4F1FEE162C96BA4600E82B88 /* CurrentWeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherModel.swift; sourceTree = "<group>"; };
 		4F1FEE192C96DC1000E82B88 /* FiveDaysWeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveDaysWeatherModel.swift; sourceTree = "<group>"; };
 		4F1FEE1B2C96DD6A00E82B88 /* CommonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonModel.swift; sourceTree = "<group>"; };
+		4F1FEE1D2C96DDF600E82B88 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				4F1FEE182C96BA4B00E82B88 /* Model */,
 				4F1FEDE42C96B21000E82B88 /* WeatherApp.swift */,
 				4F1FEDE62C96B21000E82B88 /* ContentView.swift */,
+				4F1FEE1D2C96DDF600E82B88 /* Network.swift */,
 				4F1FEDE82C96B21100E82B88 /* Assets.xcassets */,
 				4F1FEDEA2C96B21100E82B88 /* Preview Content */,
 			);
@@ -276,6 +279,7 @@
 			files = (
 				4F1FEDE72C96B21000E82B88 /* ContentView.swift in Sources */,
 				4F1FEE1A2C96DC1000E82B88 /* FiveDaysWeatherModel.swift in Sources */,
+				4F1FEE1E2C96DDF600E82B88 /* Network.swift in Sources */,
 				4F1FEE1C2C96DD6A00E82B88 /* CommonModel.swift in Sources */,
 				4F1FEE172C96BA4600E82B88 /* CurrentWeatherModel.swift in Sources */,
 				4F1FEDE52C96B21000E82B88 /* WeatherApp.swift in Sources */,
