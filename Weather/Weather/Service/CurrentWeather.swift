@@ -19,8 +19,12 @@ class CurrentWeather: ObservableObject {
     @Published var weather: CurrentWeatherModel = CurrentWeatherModel.dummyCurrentData
     
     private let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String
-
-    func getWeather() async throws {
+    
+    /// 현재의 날씨를 가져오는 메소드
+    /// - Parameters:
+    ///   - lat: 현재 위치의 위도
+    ///   - lon: 현재 위치의 경도
+    func getCurrentWeather() async throws {
         guard let apiKey = apiKey else { return }
         
         guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=37.497614076728404&lon=126.91145365297733&appid=\(apiKey)") else {
