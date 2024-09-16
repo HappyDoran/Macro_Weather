@@ -19,6 +19,7 @@
 		4F1FEE1C2C96DD6A00E82B88 /* CommonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FEE1B2C96DD6A00E82B88 /* CommonModel.swift */; };
 		4F1FEE1E2C96DDF600E82B88 /* CurrentWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FEE1D2C96DDF600E82B88 /* CurrentWeather.swift */; };
 		4F1FEE232C97F3B000E82B88 /* FiveDaysWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FEE222C97F3B000E82B88 /* FiveDaysWeather.swift */; };
+		4F48BC2F2C984A9900C336DF /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F48BC2E2C984A9900C336DF /* Location.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		4F1FEE1F2C96FCE600E82B88 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		4F1FEE202C96FD7C00E82B88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F1FEE222C97F3B000E82B88 /* FiveDaysWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveDaysWeather.swift; sourceTree = "<group>"; };
+		4F48BC2E2C984A9900C336DF /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +160,7 @@
 			children = (
 				4F1FEE1D2C96DDF600E82B88 /* CurrentWeather.swift */,
 				4F1FEE222C97F3B000E82B88 /* FiveDaysWeather.swift */,
+				4F48BC2E2C984A9900C336DF /* Location.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -310,6 +313,7 @@
 			files = (
 				4F1FEDE72C96B21000E82B88 /* ContentView.swift in Sources */,
 				4F1FEE1A2C96DC1000E82B88 /* FiveDaysWeatherModel.swift in Sources */,
+				4F48BC2F2C984A9900C336DF /* Location.swift in Sources */,
 				4F1FEE232C97F3B000E82B88 /* FiveDaysWeather.swift in Sources */,
 				4F1FEE1E2C96DDF600E82B88 /* CurrentWeather.swift in Sources */,
 				4F1FEE1C2C96DD6A00E82B88 /* CommonModel.swift in Sources */,
@@ -483,6 +487,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Weather/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app needs access to your location to provide location-based services.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -513,6 +518,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Weather/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app needs access to your location to provide location-based services.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

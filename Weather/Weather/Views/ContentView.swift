@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject private var currentWeather: CurrentWeather
     @EnvironmentObject private var fiveDaysWeather: FiveDaysWeather
+    @StateObject private var locationManager = LocationManager()
     
     var body: some View {
             ZStack{
@@ -20,7 +21,13 @@ struct ContentView: View {
                         Text("서울특별시").font(.system(size: 14, weight: .light))
                         Text("33°").font(.system(size: 72, weight: .regular)).padding(.leading, 30)
                         Text("대체로 흐림").font(.system(size: 20, weight: .regular))
-                        
+                        if let coordinate = locationManager.lastKnownLocation {
+                            Text("Latitude: \(coordinate.latitude)")
+                            
+                            Text("Longitude: \(coordinate.longitude)")
+                        } else {
+                            Text("Unknown Location")
+                        }
                         HStack(spacing: 5){
                             Text("최고: 33°").font(.system(size: 20, weight: .regular))
                             Text("최저: 22°").font(.system(size: 20, weight: .regular))
@@ -71,6 +78,9 @@ struct ContentView: View {
             await loadCurrentWeather()
             await loadFiveDaysWeather()
         }
+            .onAppear{
+                locationManager.checkLocationAuthorization()
+            }
     }
 }
 
