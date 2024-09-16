@@ -12,10 +12,11 @@ class FiveDaysWeather: ObservableObject {
     
     private let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String
     
-    /// 현재의 날씨를 가져오는 메소드
+    /// 5일의 날씨를 가져오는 메소드
     /// - Parameters:
     ///   - lat: 현재 위치의 위도
     ///   - lon: 현재 위치의 경도
+    /// - Todo: 현재 날씨를 가져오는 메소드와 매우 흡사하기 때문에 합쳐서 하나의 서비스를 만들 수 있는 방법을 찾아봅시다.
     func getFiveDaysWeather() async throws {
         guard let apiKey = apiKey else { return }
         
