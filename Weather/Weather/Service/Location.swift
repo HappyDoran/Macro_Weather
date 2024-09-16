@@ -9,7 +9,7 @@ import Foundation
 import CoreLocation
 
 class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
-    @Published var lastKnownLocation: CLLocationCoordinate2D?
+    @Published var currentLocation: CLLocationCoordinate2D?
     var manager = CLLocationManager()
     
     func checkLocationAuthorization() {
@@ -32,7 +32,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
             
         case .authorizedWhenInUse://This authorization allows you to use all location services and receive location events only when your app is in use
             print("Location authorized when in use")
-            lastKnownLocation = manager.location?.coordinate
+            currentLocation = manager.location?.coordinate
             
         @unknown default:
             print("Location service disabled")
@@ -45,6 +45,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        lastKnownLocation = locations.first?.coordinate
+        currentLocation = locations.first?.coordinate
     }
 }
