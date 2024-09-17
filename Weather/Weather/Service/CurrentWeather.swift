@@ -38,7 +38,7 @@ class CurrentWeather: ObservableObject {
             throw NetworkError.badRequest
         }
         
-//        print(String(data: data, encoding: .utf8) ?? "No data")
+        print(String(data: data, encoding: .utf8) ?? "No data")
         
         DispatchQueue.main.async {
             do {
