@@ -17,10 +17,10 @@ class FiveDaysWeather: ObservableObject {
     ///   - lat: 현재 위치의 위도
     ///   - lon: 현재 위치의 경도
     /// - Todo: 현재 날씨를 가져오는 메소드와 매우 흡사하기 때문에 합쳐서 하나의 서비스를 만들 수 있는 방법을 찾아봅시다.
-    func getFiveDaysWeather() async throws {
+    func getFiveDaysWeather(lat: Double, lon: Double) async throws {
         guard let apiKey = apiKey else { return }
         
-        guard let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?lat=44.34&lon=10.99&appid=\(apiKey)") else {
+        guard let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?lat=\(lat)&lon=\(lon)&appid=\(apiKey)") else {
             throw NetworkError.badURL
         }
         
@@ -40,3 +40,4 @@ class FiveDaysWeather: ObservableObject {
         }
     }
 }
+
