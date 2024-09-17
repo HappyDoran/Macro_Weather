@@ -30,6 +30,9 @@ class FiveDaysWeather: ObservableObject {
         else {
             throw NetworkError.badRequest
         }
+        
+        print(String(data: data, encoding: .utf8) ?? "No data")
+        
         DispatchQueue.main.async {
             do {
                 self.weather = try JSONDecoder().decode(FiveDaysWeatherModel.self, from: data)
