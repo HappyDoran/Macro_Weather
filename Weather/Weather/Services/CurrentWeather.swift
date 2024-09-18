@@ -25,9 +25,8 @@ class CurrentWeather: ObservableObject {
     ///   - lat: 현재 위치의 위도
     ///   - lon: 현재 위치의 경도
     func getCurrentWeather(lat: Double, lon: Double) async throws {
-        guard let apiKey = apiKey else { return }
         
-        guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(lat)&lon=\(lon)&appid=\(apiKey)") else {
+        guard let url = URL.getCurrentWeather(lat: lat, lon: lon) else {
             throw NetworkError.badURL
         }
         
