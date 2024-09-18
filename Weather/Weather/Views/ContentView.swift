@@ -91,10 +91,6 @@ extension ContentView {
     
     private var fiveDaysWeatherView: some View {
         ZStack {
-//            Rectangle()
-//                .frame(height: 290)
-//                .background(.ultraThinMaterial)
-//                .cornerRadius(10)
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "calendar").foregroundColor(.white)
@@ -104,8 +100,10 @@ extension ContentView {
                 Divider().foregroundColor(.white)
                 Spacer()
                 ForEach(fiveDaysWeather.weather.list, id: \.dt) { list in
-                    HStack{
-                        Text(list.dtTxt).font(.system(size: 14, weight: .bold)).foregroundColor(.white)
+                    HStack(spacing: 0) {
+                        
+                        Text(stringDateFormat(list.dtTxt) ?? "").font(.system(size: 14, weight: .bold)).foregroundColor(.white).frame(width: 110)
+                        
                         AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(list.weather[0].icon)@2x.png"))
                         { image in
                            image
@@ -119,9 +117,14 @@ extension ContentView {
                            ProgressView().frame(width: 32, height: 32)
                        }
                         Spacer()
-                        Text(String(format: "%.0f°", list.main.tempMin - 273)).font(.system(size: 20, weight: .bold)).foregroundStyle(.white.opacity(0.5))
-                        Rectangle().frame(width: 100,height: 1).cornerRadius(3)
-                        Text(String(format: "%.0f°", list.main.tempMax - 273)).font(.system(size: 20, weight: .bold)).foregroundStyle(.white.opacity(0.5))
+                        
+                        HStack{
+                            Text(String(format: "%.0f°", list.main.tempMin - 273)).font(.system(size: 17, weight: .bold)).foregroundStyle(.white.opacity(0.5))
+                            
+                            Rectangle().frame(width: 100,height: 1).cornerRadius(3)
+                            
+                            Text(String(format: "%.0f°", list.main.tempMax - 273)).font(.system(size: 17, weight: .bold)).foregroundStyle(.white.opacity(0.5))
+                        }
                     }
                 }
             }
@@ -147,6 +150,25 @@ extension ContentView {
         } catch {
             print(error.localizedDescription)
         }
+    }
+    
+    /// 가져온 String타입의 Date의 형태를 바꿔주는 메소드
+    /// - Parameters:
+    ///   - dateString: API Response를 통해 가져온 dtTxt
+    private func stringDateFormat(_ dateString: String)-> String? {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+        //String -> Date
+        //데이터 포맷이 맞지 않을 경우 nil 반환
+        guard let date = inputFormatter.date(from: dateString) else { return nil }
+
+        //Date -> String
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "MM/dd(E) HH시"
+        outputFormatter.locale = Locale(identifier: "ko_KR")
+        
+        return outputFormatter.string(from: date)
     }
 }
 

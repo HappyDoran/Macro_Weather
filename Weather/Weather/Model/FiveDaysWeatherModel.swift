@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Welcome
+// MARK: - FiveDaysWeatherModel
 struct FiveDaysWeatherModel: Codable {
     let cod: String
     let message, cnt: Int
