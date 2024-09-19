@@ -9,14 +9,14 @@ import SwiftUI
 
 @main
 struct WeatherApp: App {
-    @StateObject private var currentWeather = CurrentWeather()
-    @StateObject private var fiveDaysWeather = FiveDaysWeather()
+    @StateObject private var network = Network()
+    @StateObject private var locationManager = LocationManager()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(currentWeather)
-                .environmentObject(fiveDaysWeather)
+                .environmentObject(network)
+                .environmentObject(locationManager)
         }
     }
 }

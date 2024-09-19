@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject private var currentWeather: CurrentWeather
-    @EnvironmentObject private var fiveDaysWeather: FiveDaysWeather
-    @StateObject private var locationManager = LocationManager()
+    @EnvironmentObject private var network: Network
+    @EnvironmentObject private var locationManager: LocationManager
     
+    @State private var currentWeather: CurrentWeatherModel = CurrentWeatherModel.dummyCurrentData
+    @State private var fiveDaysWeather: FiveDaysWeatherModel = FiveDaysWeatherModel.dummyFiveDaysData
     @State private var isLoading = true
     @State private var isImageLoaded = false
     
@@ -25,47 +26,13 @@ struct ContentView: View {
                     .font(.headline)
             } else {
                 ScrollView {
-                    VStack(alignment: .center, spacing: 0) {
-                        Text("나의 위치").font(.title).foregroundColor(.white)
-                        Text(currentWeather.weather.name)
-                            .font(.system(size: 14, weight: .light))
-                            .foregroundColor(.white)
-                        HStack(spacing: 0) {
-                            AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(currentWeather.weather.weather[0].icon)@2x.png")) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 100, height: 100)
-                                    .onAppear {
-                                        isImageLoaded = true
-                                    }
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            .onAppear {
-                                if !isImageLoaded {
-                                    isLoading = false
-                                }
-                            }
-                            Text(String(format: "%.0f°", currentWeather.weather.main.temp - 273))
-                                .font(.system(size: 72, weight: .regular))
-                                .foregroundColor(.white)
-                        }
-                        Text(currentWeather.weather.weather[0].main)
-                            .font(.system(size: 20, weight: .regular))
-                            .foregroundColor(.white)
-                        
-                        HStack(spacing: 5) {
-                            Text(String(format: "최고: %.0f°", currentWeather.weather.main.tempMax - 273))
-                                .font(.system(size: 20, weight: .regular))
-                                .foregroundColor(.white)
-                            Text(String(format: "최저: %.0f°", currentWeather.weather.main.tempMin - 273))
-                                .font(.system(size: 20, weight: .regular))
-                                .foregroundColor(.white)
-                        }
-                        .padding(.bottom, 20)
+                    currentWeatherView.padding(.top, 50)
+                    fiveDaysWeatherView
+                }
+                .refreshable {
+                    if let currentLocation = locationManager.currentLocation {
+                        await loadWeather(lat: currentLocation.latitude,lon: currentLocation.longitude)
                     }
-                    .padding(.horizontal, 16)
                 }
             }
         }
@@ -73,9 +40,8 @@ struct ContentView: View {
             locationManager.checkLocationAuthorization()
             if let currentLocation = locationManager.currentLocation {
                 Task {
-                    await loadCurrentWeather(lat: currentLocation.latitude, lon: currentLocation.longitude)
-                    await loadFiveDaysWeather(lat: currentLocation.latitude, lon: currentLocation.longitude)
-
+                    await loadWeather(lat: currentLocation.latitude, lon: currentLocation.longitude)
+                    
                     isLoading = false
                 }
             }
@@ -83,28 +49,131 @@ struct ContentView: View {
     }
 }
 
+extension ContentView {
+    private var currentWeatherView: some View {
+        VStack(alignment: .center, spacing: 0) {
+            Text("나의 위치").font(.title).foregroundColor(.white)
+            Text(currentWeather.name)
+                .font(.system(size: 14, weight: .light))
+                .foregroundColor(.white)
+            HStack(spacing: 0) {
+                AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(currentWeather.weather[0].icon)@2x.png")) { image in
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                        .onAppear {
+                            isImageLoaded = true
+                        }
+                } placeholder: {
+                    ProgressView().frame(width: 100, height: 100)
+                }
+                .onAppear {
+                    if !isImageLoaded {
+                        isLoading = false
+                    }
+                }
+                Text(String(format: "%.0f°", currentWeather.main.temp - 273))
+                    .font(.system(size: 72, weight: .regular))
+                    .foregroundColor(.white)
+            }
+            Text(currentWeather.weather[0].main)
+                .font(.system(size: 20, weight: .regular))
+                .foregroundColor(.white)
+            
+            HStack(spacing: 5) {
+                Text(String(format: "최고: %.0f°", currentWeather.main.tempMax - 273))
+                    .font(.system(size: 20, weight: .regular))
+                    .foregroundColor(.white)
+                Text(String(format: "최저: %.0f°", currentWeather.main.tempMin - 273))
+                    .font(.system(size: 20, weight: .regular))
+                    .foregroundColor(.white)
+            }
+            .padding(.bottom, 20)
+        }
+        .padding(.horizontal, 16)
+    }
+    
+    private var fiveDaysWeatherView: some View {
+        ZStack {
+            VStack(alignment: .leading) {
+                HStack {
+                    Image(systemName: "calendar").foregroundColor(.white)
+                    Text("5일간의 일기 예보").foregroundColor(.white)
+                    Spacer()
+                }
+                Divider().foregroundColor(.white)
+                Spacer()
+                ForEach(fiveDaysWeather.list, id: \.dt) { list in
+                    HStack(spacing: 0) {
+                        
+                        Text(stringDateFormat(list.dtTxt) ?? "").font(.system(size: 14, weight: .bold)).foregroundColor(.white).frame(width: 110)
+                        
+                        AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(list.weather[0].icon)@2x.png"))
+                        { image in
+                           image
+                               .resizable()
+                               .scaledToFit()
+                               .frame(width: 32, height: 32)
+                               .onAppear {
+                                   isImageLoaded = true
+                               }
+                       } placeholder: {
+                           ProgressView().frame(width: 32, height: 32)
+                       }
+                        Spacer()
+                        
+                        HStack{
+                            Text(String(format: "%.0f°", list.main.tempMin - 273)).font(.system(size: 17, weight: .bold)).foregroundStyle(.white.opacity(0.5))
+                            
+                            Rectangle().frame(width: 100,height: 1).cornerRadius(3)
+                            
+                            Text(String(format: "%.0f°", list.main.tempMax - 273)).font(.system(size: 17, weight: .bold)).foregroundStyle(.white.opacity(0.5))
+                        }
+                    }
+                }
+            }
+            .padding(.all, 16)
+        }
+        .padding(.horizontal, 16)
+    }
+}
+
 
 extension ContentView {
-    private func loadCurrentWeather(lat: Double, lon: Double) async {
+    private func loadWeather(lat: Double, lon: Double) async {
         do {
-            try await currentWeather.getCurrentWeather(lat: lat, lon: lon)
+            self.currentWeather = try await network.fetchData(url: URL.getCurrentWeather(lat: lat, lon: lon))
+            self.fiveDaysWeather = try await network.fetchData(url: URL.getFiveDaysWeather(lat: lat, lon: lon))
         } catch {
             print(error.localizedDescription)
         }
     }
     
-    private func loadFiveDaysWeather(lat: Double, lon: Double) async {
-        do {
-            try await fiveDaysWeather.getFiveDaysWeather(lat: lat, lon: lon)
-        } catch {
-            print(error.localizedDescription)
-        }
+    /// 가져온 String타입의 Date의 형태를 바꿔주는 메소드
+    /// - Parameters:
+    ///   - dateString: API Response를 통해 가져온 dtTxt
+    private func stringDateFormat(_ dateString: String)-> String? {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+        //String -> Date
+        //데이터 포맷이 맞지 않을 경우 nil 반환
+        guard let date = inputFormatter.date(from: dateString) else { return nil }
+
+        //Date -> String
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "MM/dd(E) HH시"
+        outputFormatter.locale = Locale(identifier: "ko_KR")
+        
+        return outputFormatter.string(from: date)
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView() .environmentObject(CurrentWeather())
-            .environmentObject(FiveDaysWeather())
+        ContentView()
+            .environmentObject(Network())
+            .environmentObject(LocationManager())
     }
 }
