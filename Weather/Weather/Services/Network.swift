@@ -15,10 +15,8 @@ enum NetworkError: Error {
 }
 
 @MainActor
-class WeatherManager: ObservableObject {
-    // MARK: 해당 부분을 제네릭을 쓰면서 굳이?
-    
-    func getWeather<T: Decodable>(url: URL?) async throws -> T {
+class Network: ObservableObject {
+    func fetchData<T: Decodable>(url: URL?) async throws -> T {
         guard let url = url else {
             throw NetworkError.badURL
         }

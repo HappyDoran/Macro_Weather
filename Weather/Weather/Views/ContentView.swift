@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject private var weatherManager: WeatherManager
+    @EnvironmentObject private var network: Network
     @EnvironmentObject private var locationManager: LocationManager
     
     @State private var currentWeather: CurrentWeatherModel = CurrentWeatherModel.dummyCurrentData
@@ -138,8 +138,8 @@ extension ContentView {
 extension ContentView {
     private func loadWeather(lat: Double, lon: Double) async {
         do {
-            self.currentWeather = try await weatherManager.getWeather(url: URL.getCurrentWeather(lat: lat, lon: lon))
-            self.fiveDaysWeather = try await weatherManager.getWeather(url: URL.getFiveDaysWeather(lat: lat, lon: lon))
+            self.currentWeather = try await network.fetchData(url: URL.getCurrentWeather(lat: lat, lon: lon))
+            self.fiveDaysWeather = try await network.fetchData(url: URL.getFiveDaysWeather(lat: lat, lon: lon))
         } catch {
             print(error.localizedDescription)
         }
@@ -168,7 +168,7 @@ extension ContentView {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(WeatherManager())
+            .environmentObject(Network())
             .environmentObject(LocationManager())
     }
 }
