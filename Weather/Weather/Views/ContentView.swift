@@ -10,6 +10,9 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject private var weatherManager: WeatherManager
     @EnvironmentObject private var locationManager: LocationManager
+    
+    @State private var currentWeather: CurrentWeatherModel = CurrentWeatherModel.dummyCurrentData
+    @State private var fiveDaysWeather: FiveDaysWeatherModel = FiveDaysWeatherModel.dummyFiveDaysData
     @State private var isLoading = true
     @State private var isImageLoaded = false
     
@@ -45,11 +48,11 @@ extension ContentView {
     private var currentWeatherView: some View {
         VStack(alignment: .center, spacing: 0) {
             Text("나의 위치").font(.title).foregroundColor(.white)
-            Text(weatherManager.currentWeather.name)
+            Text(currentWeather.name)
                 .font(.system(size: 14, weight: .light))
                 .foregroundColor(.white)
             HStack(spacing: 0) {
-                AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(weatherManager.currentWeather.weather[0].icon)@2x.png")) { image in
+                AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(currentWeather.weather[0].icon)@2x.png")) { image in
                     image
                         .resizable()
                         .scaledToFit()
@@ -65,19 +68,19 @@ extension ContentView {
                         isLoading = false
                     }
                 }
-                Text(String(format: "%.0f°", weatherManager.currentWeather.main.temp - 273))
+                Text(String(format: "%.0f°", currentWeather.main.temp - 273))
                     .font(.system(size: 72, weight: .regular))
                     .foregroundColor(.white)
             }
-            Text(weatherManager.currentWeather.weather[0].main)
+            Text(currentWeather.weather[0].main)
                 .font(.system(size: 20, weight: .regular))
                 .foregroundColor(.white)
             
             HStack(spacing: 5) {
-                Text(String(format: "최고: %.0f°", weatherManager.currentWeather.main.tempMax - 273))
+                Text(String(format: "최고: %.0f°", currentWeather.main.tempMax - 273))
                     .font(.system(size: 20, weight: .regular))
                     .foregroundColor(.white)
-                Text(String(format: "최저: %.0f°", weatherManager.currentWeather.main.tempMin - 273))
+                Text(String(format: "최저: %.0f°", currentWeather.main.tempMin - 273))
                     .font(.system(size: 20, weight: .regular))
                     .foregroundColor(.white)
             }
@@ -96,7 +99,7 @@ extension ContentView {
                 }
                 Divider().foregroundColor(.white)
                 Spacer()
-                ForEach(weatherManager.fiveDaysWeather.list, id: \.dt) { list in
+                ForEach(fiveDaysWeather.list, id: \.dt) { list in
                     HStack(spacing: 0) {
                         
                         Text(stringDateFormat(list.dtTxt) ?? "").font(.system(size: 14, weight: .bold)).foregroundColor(.white).frame(width: 110)
@@ -135,8 +138,8 @@ extension ContentView {
 extension ContentView {
     private func loadWeather(lat: Double, lon: Double) async {
         do {
-            weatherManager.currentWeather = try await weatherManager.getWeather(url: URL.getCurrentWeather(lat: lat, lon: lon))
-            weatherManager.fiveDaysWeather = try await weatherManager.getWeather(url: URL.getFiveDaysWeather(lat: lat, lon: lon))
+            self.currentWeather = try await weatherManager.getWeather(url: URL.getCurrentWeather(lat: lat, lon: lon))
+            self.fiveDaysWeather = try await weatherManager.getWeather(url: URL.getFiveDaysWeather(lat: lat, lon: lon))
         } catch {
             print(error.localizedDescription)
         }
@@ -165,7 +168,7 @@ extension ContentView {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(WeatherManager(currentWeather: CurrentWeatherModel.dummyCurrentData, fiveDaysWeather: FiveDaysWeatherModel.dummyFiveDaysData))
+            .environmentObject(WeatherManager())
             .environmentObject(LocationManager())
     }
 }

@@ -14,14 +14,9 @@ enum NetworkError: Error {
     case decodingError
 }
 
+@MainActor
 class WeatherManager: ObservableObject {
-    @Published var currentWeather: CurrentWeatherModel
-    @Published var fiveDaysWeather: FiveDaysWeatherModel
-    
-    init(currentWeather: CurrentWeatherModel, fiveDaysWeather: FiveDaysWeatherModel) {
-        self.currentWeather = currentWeather
-        self.fiveDaysWeather = fiveDaysWeather
-    }
+    // MARK: 해당 부분을 제네릭을 쓰면서 굳이?
     
     func getWeather<T: Decodable>(url: URL?) async throws -> T {
         guard let url = url else {
