@@ -29,6 +29,11 @@ struct ContentView: View {
                     currentWeatherView.padding(.top, 50)
                     fiveDaysWeatherView
                 }
+                .refreshable {
+                    if let currentLocation = locationManager.currentLocation {
+                        await loadWeather(lat: currentLocation.latitude,lon: currentLocation.longitude)
+                    }
+                }
             }
         }
         .onAppear {
