@@ -13,8 +13,14 @@ struct ContentView: View {
     
     @State private var currentWeather: CurrentWeatherModel = CurrentWeatherModel.dummyCurrentData
     @State private var fiveDaysWeather: FiveDaysWeatherModel = FiveDaysWeatherModel.dummyFiveDaysData
+    
     @State private var isLoading = true
     @State private var isImageLoaded = false
+    @State private var showingAlert = false
+    
+    @State private var lat = 0.0
+    @State private var lon = 0.0
+    
     
     var body: some View {
         ZStack {
@@ -26,6 +32,7 @@ struct ContentView: View {
                     .font(.headline)
             } else {
                 ScrollView {
+                    plusView
                     currentWeatherView.padding(.top, 50)
                     fiveDaysWeatherView
                 }
@@ -42,6 +49,9 @@ struct ContentView: View {
                 Task {
                     await loadWeather(lat: currentLocation.latitude, lon: currentLocation.longitude)
                     
+                    self.lat = currentLocation.latitude
+                    self.lon = currentLocation.longitude
+                    
                     isLoading = false
                 }
             }
@@ -50,6 +60,27 @@ struct ContentView: View {
 }
 
 extension ContentView {
+    private var plusView: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                showingAlert.toggle()
+            }){
+                Image(systemName: "plus").resizable().frame(width: 20,height: 20).foregroundColor(.white)
+            }
+            .alert("위치 변경", isPresented: $showingAlert) {
+                TextField("위도값을 입력해주세요", value: $lat, formatter: NumberFormatter())
+                TextField("경도값을 입력해주세요", value: $lon, formatter: NumberFormatter())
+                Button("변경", action: {})
+                Button("현재 위치로 재설정", action: {})
+                Button("취소", action: {})
+            } message: {
+                Text("변경할 좌표를 입력해주세요.")
+            }
+        }
+        .padding(.horizontal, 16)
+    }
+    
     private var currentWeatherView: some View {
         VStack(alignment: .center, spacing: 0) {
             Text("나의 위치").font(.title).foregroundColor(.white)
@@ -96,6 +127,7 @@ extension ContentView {
     
     private var fiveDaysWeatherView: some View {
         ZStack {
+            Rectangle().background(.ultraThinMaterial).cornerRadius(10)
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "calendar").foregroundColor(.white)
@@ -106,7 +138,6 @@ extension ContentView {
                 Spacer()
                 ForEach(fiveDaysWeather.list, id: \.dt) { list in
                     HStack(spacing: 0) {
-                        
                         Text(stringDateFormat(list.dtTxt) ?? "").font(.system(size: 14, weight: .bold)).foregroundColor(.white).frame(width: 110)
                         
                         AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(list.weather[0].icon)@2x.png"))
@@ -168,7 +199,10 @@ extension ContentView {
         
         return outputFormatter.string(from: date)
     }
+    
+    
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
