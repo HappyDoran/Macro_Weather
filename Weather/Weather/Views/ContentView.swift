@@ -18,9 +18,8 @@ struct ContentView: View {
     @State private var isImageLoaded = false
     @State private var showingAlert = false
     
-    @State private var lat = 0.0
-    @State private var lon = 0.0
-    
+    @State private var lat: Double = 0.0
+    @State private var lon: Double = 0.0
     
     var body: some View {
         ZStack {
@@ -69,11 +68,11 @@ extension ContentView {
                 Image(systemName: "plus").resizable().frame(width: 20,height: 20).foregroundColor(.white)
             }
             .alert("위치 변경", isPresented: $showingAlert) {
-                TextField("위도값을 입력해주세요", value: $lat, formatter: NumberFormatter())
-                TextField("경도값을 입력해주세요", value: $lon, formatter: NumberFormatter())
+                TextField("위도값을 입력해주세요", value: $lat, formatter: positionFormatter)
+                TextField("경도값을 입력해주세요", value: $lon, formatter: positionFormatter)
                 Button("변경", action: {})
                 Button("현재 위치로 재설정", action: {})
-                Button("취소", action: {})
+                Button("취소", role: .cancel) { }
             } message: {
                 Text("변경할 좌표를 입력해주세요.")
             }
@@ -200,7 +199,14 @@ extension ContentView {
         return outputFormatter.string(from: date)
     }
     
-    
+    private var positionFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 1
+        formatter.maximumFractionDigits = 10
+        
+        return formatter
+    }
 }
 
 
