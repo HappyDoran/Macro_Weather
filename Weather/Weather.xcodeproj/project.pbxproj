@@ -21,6 +21,7 @@
 		4F2B4FA12C9B2EBB0070D6A2 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2B4FA02C9B2EBB0070D6A2 /* Network.swift */; };
 		4F2B4FA42C9B2EFA0070D6A2 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2B4FA32C9B2EFA0070D6A2 /* Constant.swift */; };
 		4F48BC2F2C984A9900C336DF /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F48BC2E2C984A9900C336DF /* Location.swift */; };
+		4FD33D272C9DAC6200772E55 /* CacheAsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD33D262C9DAC6200772E55 /* CacheAsyncImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		4F2B4FA02C9B2EBB0070D6A2 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		4F2B4FA32C9B2EFA0070D6A2 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		4F48BC2E2C984A9900C336DF /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		4FD33D262C9DAC6200772E55 /* CacheAsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheAsyncImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				4F1FEDE62C96B21000E82B88 /* ContentView.swift */,
+				4FD33D262C9DAC6200772E55 /* CacheAsyncImage.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F1FEDE72C96B21000E82B88 /* ContentView.swift in Sources */,
+				4FD33D272C9DAC6200772E55 /* CacheAsyncImage.swift in Sources */,
 				4F1FEE1A2C96DC1000E82B88 /* FiveDaysWeatherModel.swift in Sources */,
 				4F48BC2F2C984A9900C336DF /* Location.swift in Sources */,
 				4F2B4FA12C9B2EBB0070D6A2 /* Network.swift in Sources */,

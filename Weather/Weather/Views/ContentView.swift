@@ -104,22 +104,20 @@ extension ContentView {
                 .font(.system(size: 14, weight: .light))
                 .foregroundColor(.white)
             HStack(spacing: 0) {
-                AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(currentWeather.weather[0].icon)@2x.png")) { image in
-                    image
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100, height: 100)
-                        .onAppear {
-                            isImageLoaded = true
-                        }
-                } placeholder: {
-                    ProgressView().frame(width: 100, height: 100)
-                }
-                .onAppear {
-                    if !isImageLoaded {
-                        isLoading = false
+                
+                CacheAsyncImage(
+                    url: URL(string: "https://openweathermap.org/img/wn/\(currentWeather.weather[0].icon)@2x.png")!,
+                    placeholder: {
+                        ProgressView().frame(width: 100, height: 100)
+                    },
+                    content: { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100, height: 100)
                     }
-                }
+                )
+                
                 Text(String(format: "%.0f°", currentWeather.main.temp - 273))
                     .font(.system(size: 72, weight: .regular))
                     .foregroundColor(.white)
@@ -156,18 +154,18 @@ extension ContentView {
                     HStack(spacing: 0) {
                         Text(stringDateFormat(list.dtTxt) ?? "").font(.system(size: 14, weight: .bold)).foregroundColor(.white).frame(width: 110)
                         
-                        AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(list.weather[0].icon)@2x.png"))
-                        { image in
-                           image
-                               .resizable()
-                               .scaledToFit()
-                               .frame(width: 32, height: 32)
-                               .onAppear {
-                                   isImageLoaded = true
-                               }
-                       } placeholder: {
-                           ProgressView().frame(width: 32, height: 32)
-                       }
+                        CacheAsyncImage(
+                            url: URL(string: "https://openweathermap.org/img/wn/\(list.weather[0].icon)@2x.png")!,
+                            placeholder: {
+                                ProgressView().frame(width: 32, height: 32)
+                            },
+                            content: { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 32, height: 32)
+                            }
+                        )
                         Spacer()
                         
                         HStack{
