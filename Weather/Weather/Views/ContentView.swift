@@ -20,6 +20,7 @@ struct ContentView: View {
     
     @State private var lat: Double = 0.0
     @State private var lon: Double = 0.0
+    @FocusState private var isFocused: Bool
     
     var body: some View {
         ZStack {
@@ -68,10 +69,26 @@ extension ContentView {
                 Image(systemName: "plus").resizable().frame(width: 20,height: 20).foregroundColor(.white)
             }
             .alert("위치 변경", isPresented: $showingAlert) {
-                TextField("위도값을 입력해주세요", value: $lat, formatter: positionFormatter)
-                TextField("경도값을 입력해주세요", value: $lon, formatter: positionFormatter)
-                Button("변경", action: {})
-                Button("현재 위치로 재설정", action: {})
+                TextField("위도값을 입력해주세요", value: $lat, formatter: positionFormatter).focused($isFocused).keyboardType(.decimalPad)
+                TextField("경도값을 입력해주세요", value: $lon, formatter: positionFormatter).focused($isFocused).keyboardType(.decimalPad)
+                Button("변경", action: {
+                    isLoading = true
+                    Task {
+                        await loadWeather(lat: lat, lon: lon)
+                        isLoading = false
+                    }
+                })
+                Button("현재 위치로 재설정", action: {
+                    if let currentLocation = locationManager.currentLocation {
+                        isLoading = true
+                        Task {
+                            await loadWeather(lat: currentLocation.latitude, lon: currentLocation.longitude)
+                            lat = currentLocation.latitude
+                            lon = currentLocation.longitude
+                            isLoading = false
+                        }
+                    }
+                })
                 Button("취소", role: .cancel) { }
             } message: {
                 Text("변경할 좌표를 입력해주세요.")
