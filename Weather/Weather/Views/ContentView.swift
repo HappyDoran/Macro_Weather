@@ -13,8 +13,14 @@ struct ContentView: View {
     
     @State private var currentWeather: CurrentWeatherModel = CurrentWeatherModel.dummyCurrentData
     @State private var fiveDaysWeather: FiveDaysWeatherModel = FiveDaysWeatherModel.dummyFiveDaysData
+    
     @State private var isLoading = true
     @State private var isImageLoaded = false
+    @State private var showingAlert = false
+    
+    @State private var lat: Double = 0.0
+    @State private var lon: Double = 0.0
+    @FocusState private var isFocused: Bool
     
     var body: some View {
         ZStack {
@@ -26,6 +32,7 @@ struct ContentView: View {
                     .font(.headline)
             } else {
                 ScrollView {
+                    plusView
                     currentWeatherView.padding(.top, 50)
                     fiveDaysWeatherView
                 }
@@ -42,6 +49,9 @@ struct ContentView: View {
                 Task {
                     await loadWeather(lat: currentLocation.latitude, lon: currentLocation.longitude)
                     
+                    self.lat = currentLocation.latitude
+                    self.lon = currentLocation.longitude
+                    
                     isLoading = false
                 }
             }
@@ -50,6 +60,43 @@ struct ContentView: View {
 }
 
 extension ContentView {
+    private var plusView: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                showingAlert.toggle()
+            }){
+                Image(systemName: "plus").resizable().frame(width: 20,height: 20).foregroundColor(.white)
+            }
+            .alert("위치 변경", isPresented: $showingAlert) {
+                TextField("위도값을 입력해주세요", value: $lat, formatter: positionFormatter).focused($isFocused).keyboardType(.decimalPad)
+                TextField("경도값을 입력해주세요", value: $lon, formatter: positionFormatter).focused($isFocused).keyboardType(.decimalPad)
+                Button("변경", action: {
+                    isLoading = true
+                    Task {
+                        await loadWeather(lat: lat, lon: lon)
+                        isLoading = false
+                    }
+                })
+                Button("현재 위치로 재설정", action: {
+                    if let currentLocation = locationManager.currentLocation {
+                        isLoading = true
+                        Task {
+                            await loadWeather(lat: currentLocation.latitude, lon: currentLocation.longitude)
+                            lat = currentLocation.latitude
+                            lon = currentLocation.longitude
+                            isLoading = false
+                        }
+                    }
+                })
+                Button("취소", role: .cancel) { }
+            } message: {
+                Text("변경할 좌표를 입력해주세요.")
+            }
+        }
+        .padding(.horizontal, 16)
+    }
+    
     private var currentWeatherView: some View {
         VStack(alignment: .center, spacing: 0) {
             Text("나의 위치").font(.title).foregroundColor(.white)
@@ -57,22 +104,20 @@ extension ContentView {
                 .font(.system(size: 14, weight: .light))
                 .foregroundColor(.white)
             HStack(spacing: 0) {
-                AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(currentWeather.weather[0].icon)@2x.png")) { image in
-                    image
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100, height: 100)
-                        .onAppear {
-                            isImageLoaded = true
-                        }
-                } placeholder: {
-                    ProgressView().frame(width: 100, height: 100)
-                }
-                .onAppear {
-                    if !isImageLoaded {
-                        isLoading = false
+                
+                CacheAsyncImage(
+                    url: URL(string: "https://openweathermap.org/img/wn/\(currentWeather.weather[0].icon)@2x.png")!,
+                    placeholder: {
+                        ProgressView().frame(width: 100, height: 100)
+                    },
+                    content: { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100, height: 100)
                     }
-                }
+                )
+                
                 Text(String(format: "%.0f°", currentWeather.main.temp - 273))
                     .font(.system(size: 72, weight: .regular))
                     .foregroundColor(.white)
@@ -96,6 +141,7 @@ extension ContentView {
     
     private var fiveDaysWeatherView: some View {
         ZStack {
+            Rectangle().background(.ultraThinMaterial).cornerRadius(10)
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "calendar").foregroundColor(.white)
@@ -106,21 +152,20 @@ extension ContentView {
                 Spacer()
                 ForEach(fiveDaysWeather.list, id: \.dt) { list in
                     HStack(spacing: 0) {
-                        
                         Text(stringDateFormat(list.dtTxt) ?? "").font(.system(size: 14, weight: .bold)).foregroundColor(.white).frame(width: 110)
                         
-                        AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(list.weather[0].icon)@2x.png"))
-                        { image in
-                           image
-                               .resizable()
-                               .scaledToFit()
-                               .frame(width: 32, height: 32)
-                               .onAppear {
-                                   isImageLoaded = true
-                               }
-                       } placeholder: {
-                           ProgressView().frame(width: 32, height: 32)
-                       }
+                        CacheAsyncImage(
+                            url: URL(string: "https://openweathermap.org/img/wn/\(list.weather[0].icon)@2x.png")!,
+                            placeholder: {
+                                ProgressView().frame(width: 32, height: 32)
+                            },
+                            content: { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 32, height: 32)
+                            }
+                        )
                         Spacer()
                         
                         HStack{
@@ -168,7 +213,17 @@ extension ContentView {
         
         return outputFormatter.string(from: date)
     }
+    
+    private var positionFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 1
+        formatter.maximumFractionDigits = 10
+        
+        return formatter
+    }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
